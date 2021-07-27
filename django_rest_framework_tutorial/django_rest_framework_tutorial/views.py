@@ -1,6 +1,8 @@
 from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from .serializers import StudentSerializer
+from .models import Student
 
 class TestView(APIView):
     def get(self, request, *args, **kwargs):
@@ -10,4 +12,8 @@ class TestView(APIView):
         }
         return Response(data)
     
-    
+    def post(self, request, *args, **kwargs):
+        serializer = StudentSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
